@@ -15,8 +15,12 @@ public class SoftCreditRepository {
     
     private List<SObject> findPSCs() {
         List<SObject> retVal = new List<SObject>();
-        throw new NotImplementedException();
-        //return retVal;
+        retVal = Database.query(getPSCQuery());
+        return retVal;
+    }
+    
+    private String getPSCQuery() {
+        return '';
     }
     
     public class Result {
