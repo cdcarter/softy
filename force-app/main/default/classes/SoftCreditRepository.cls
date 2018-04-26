@@ -108,11 +108,14 @@ public class SoftCreditRepository {
         
     public class Result {
         public Id contactId {get;set;}
+        
+        private Boolean sorted = false;
+        
         public Integer numOpportunities {get {return this.opportunities.size();}}
         public Integer numOCRs {get;set;}
         public Integer numPSCs {get;set;}
         public List<CreditObject> creditObjects {get{
-            this.creditObjects.sort(); 
+            if (!sorted){ this.creditObjects.sort(); }
             return this.creditObjects;
         } set;}
         public Map<Id,Opportunity> opportunities {get;set;}
@@ -120,12 +123,6 @@ public class SoftCreditRepository {
             this.opportunities = new Map<Id,Opportunity>();
             this.creditObjects = new List<CreditObject>();
         }
-        public void inspect(){
-            system.debug('***** INSPECTING SoftCreditRepository RESULT *****');
-            system.debug(this);
-            system.debug('num OCRs: '+String.valueOf(this.numOCRs));
-            system.debug('num PSCs: '+String.valueOf(this.numPSCs));
-            system.debug('num Opps: '+String.valueOf(this.numOpportunities));
-        }
+
     }
 }

@@ -6,7 +6,7 @@ public class SoftCreditMapper {
     
     public static SoftCredit go(SoftCreditRepository.Result result) {
         SoftCredit retVal = new SoftCredit();
-		retVal.total_records = result.creditObjects.size();
+        retVal.total_records = result.creditObjects.size();
         retVal.soft_credits = new List<SoftCredit.Item>();
         for(SoftCreditRepository.CreditObject obj : result.creditObjects) {
             SoftCredit.Item item = new SoftCredit.Item();
@@ -28,7 +28,7 @@ public class SoftCreditMapper {
             }
             item.oppty_name = (String)result.opportunities.get(item.oppty_id).get('Name');
             item.opportunity_date = (Date)result.opportunities.get(item.oppty_id).get('CloseDate');
-
+            item.oppty_amount = (Decimal)result.opportunities.get(item.oppty_id).get('Amount');
             
             retVal.soft_credits.add(item);
         }
