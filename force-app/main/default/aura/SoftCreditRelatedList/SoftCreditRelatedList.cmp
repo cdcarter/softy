@@ -1,0 +1,38 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="model" type="Map" default="{}" required="true" access="private"/>
+
+    <aura:attribute name="isLoadingDataTable" type="Boolean" default="true"/>
+    <aura:attribute name="isLoadingComponent" type="Boolean" default="true"/>
+
+    <aura:attribute name="motif" type="string" default="custom:custom43"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="forceRelatedListSingleContainer">
+        <lightning:card iconName="{!v.motif}" class="slds-card_boundary" variant="base">
+            <aura:set attribute="title">
+                <strong>
+                    Soft Credits zzzmakemealabel
+                    <aura:if isTrue="{!not(v.isLoadingComponent)}" >
+                        <span> ({!v.model.total_records})</span>
+                    </aura:if>
+                </strong>
+            </aura:set>
+            <aura:set attribute="footer">
+            </aura:set>
+            <aura:set attribute="actions">
+            </aura:set>
+            <aura:if isTrue="{!not(or(v.isLoadingComponent, equals(0, v.model.total_records)))}">
+                <div class="datatable_container" style="height: 300px;">
+                    <lightning:datatable data="{!v.model.tableData}"
+                         columns="{!v.model.tableColumns}"
+                         keyField="Id"
+                         hideCheckboxColumn="true"
+                         enableInfiniteLoading="{!v.model.enableInfiniteLoading}"
+                         onloadmore="{!c.loadMoreData}"
+                         isLoading="{!v.isLoadingDataTable}"
+                    />
+                </div>
+            </aura:if>
+        </lightning:card>
+    </div>	
+</aura:component>

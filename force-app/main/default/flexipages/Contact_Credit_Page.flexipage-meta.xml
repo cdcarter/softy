@@ -20,6 +20,9 @@
             <componentName>force:relatedListQuickLinksContainer</componentName>
         </componentInstances>
         <componentInstances>
+            <componentName>SoftCreditRelatedList</componentName>
+        </componentInstances>
+        <componentInstances>
             <componentInstanceProperties>
                 <name>parentFieldApiName</name>
                 <value>Contact.Id</value>

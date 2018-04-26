@@ -1,0 +1,5 @@
+<design:component label="Soft Credits Related List">
+    <sfdc:objects >
+        <sfdc:object >Contact</sfdc:object>
+    </sfdc:objects>
+</design:component>

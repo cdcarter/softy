@@ -2,11 +2,11 @@ public class SoftCredit {
     // MODEL JUST FOR SERIALIZATION
     // USES JS STYLE NAMES
     @auraEnabled
-    public List<Model> soft_credits = new List<Model>();
+    public List<Item> soft_credits = new List<Item>();
     @auraEnabled
     public Integer total_records {get;set;}
     
-    public with sharing class Model {
+    public with sharing class Item {
         @auraEnabled
         public Id psc_id {get;set;}
         @auraEnabled

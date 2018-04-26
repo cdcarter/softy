@@ -9,25 +9,121 @@ public class SoftCreditRepository {
     
     public Result findAllSoftCredits() {
         Result retVal = new Result();
-        throw new NotImplementedException();
-        //return retVal;
+        retVal.contactId = this.contactId;
+        
+        List<SObject> pscs = findPSCs();
+        List<OpportunityContactRole> ocrs = findOCRs();
+        
+        for(SObject psc : pscs) {
+            retVal.creditObjects.add(new CreditObject(psc));
+        }
+        
+        for(OpportunityContactRole ocr : ocrs) {
+            retVal.opportunities.put(ocr.OpportunityId, ocr.Opportunity);
+            retVal.creditObjects.add(new CreditObject((SObject)ocr));
+        }
+        retVal.numOCRs = ocrs.size();
+        retVal.numPSCs = pscs.size();
+        
+        return retVal;
     }
     
     private List<SObject> findPSCs() {
         List<SObject> retVal = new List<SObject>();
-        retVal = Database.query(getPSCQuery());
+        retval = Database.query(getPSCQuery());
         return retVal;
     }
     
+    private List<OpportunityContactRole> findOCRs() {
+        List<OpportunityContactRole> retVal = new List<OpportunityContactRole>();
+        retVal = Database.query(getOCRQuery());
+        return retVal;
+    }
+        
     private String getPSCQuery() {
-        return '';
+        fflib_QueryFactory q = new fflib_QueryFactory(npsp__Partial_Soft_Credit__c.SObjectType);
+        q.selectFields(new List<String>{
+            'Name',
+            'Id',
+            'npsp__Role_Name__c',
+            'npsp__Opportunity__c',
+            'npsp__Opportunity__r.CloseDate',
+            'npsp__Contact_Role_ID__c',
+            'npsp__Amount__c'
+        });
+        Id contactId = this.contactId;
+        q.setCondition('npsp__Contact__c = :contactId');
+        return q.toSoql();
     }
     
+    private String getOCRQuery() {
+    	fflib_QueryFactory q = new fflib_QueryFactory(OpportunityContactRole.SObjectType);
+        q.selectFields(new List<String> {
+            'OpportunityId',
+            'Role',
+            'Opportunity.Name',
+            'Opportunity.StageName',
+            'Opportunity.CloseDate',
+            'Opportunity.Amount'
+        });
+        Id contactId = this.contactId;
+        q.setCondition('ContactId = :contactId');
+        return q.toSoql();
+    }
+    
+    public class CreditObject implements Comparable {
+        private SObject sobj;
+        public SObjectType sobjecttype {get { return sobj.getSObjectType();}}
+        public Date creditDate {get {
+            if (sobj.getSObjectType() == OpportunityContactRole.SObjectType) {
+                this.creditDate = (Date)sobj.getSObject('Opportunity').get('CloseDate');
+            } else {
+                this.creditDate = (Date)sobj.getSObject('npsp__Opportunity__r').get('CloseDate');
+            }
+            return this.creditDate;
+        } set;}
+        private CreditObject(SObject sobj){
+            this.sobj = sobj;
+        }
+        public Integer compareTo(Object compareTo) {
+            CreditObject compareObj = (CreditObject)compareTo;
+            
+            if (this.creditDate > compareObj.creditDate) {
+                return 1;
+            } else if (this.creditDate < compareObj.creditDate) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+        public Object get(String name) {
+            return this.sobj.get(name);
+        }
+        public SObject getSObject(String name) {
+            return this.sobj.getSObject(name);
+        }
+    }
+        
     public class Result {
-        public Integer numOpportunities {get;set;}
+        public Id contactId {get;set;}
+        public Integer numOpportunities {get {return this.opportunities.size();}}
         public Integer numOCRs {get;set;}
         public Integer numPSCs {get;set;}
-        public List<sObject> creditObjects {get;set;}
+        public List<CreditObject> creditObjects {get{
+            this.creditObjects.sort(); 
+            return this.creditObjects;
+        } set;}
         public Map<Id,Opportunity> opportunities {get;set;}
+        public Result(){
+            this.opportunities = new Map<Id,Opportunity>();
+            this.creditObjects = new List<CreditObject>();
+        }
+        public void inspect(){
+            system.debug('***** INSPECTING SoftCreditRepository RESULT *****');
+            system.debug(this);
+            system.debug('num OCRs: '+String.valueOf(this.numOCRs));
+            system.debug('num PSCs: '+String.valueOf(this.numPSCs));
+            system.debug('num Opps: '+String.valueOf(this.numOpportunities));
+        }
     }
 }
