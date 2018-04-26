@@ -18,11 +18,13 @@ public class SoftCreditMapper {
                 item.oppty_id = (Id)obj.get('npsp__Opportunity__c');
                 item.role = (String)obj.get('npsp__Role_Name__c');
                 item.amount = (Decimal)obj.get('npsp__Amount__c');
+                item.partial = True;
             } else {
                 item.ocr_id = (Id)obj.get('Id');
                 item.role = (String)obj.get('Role');
                 item.oppty_id = (Id)obj.get('OpportunityId');
                 item.amount = (Decimal)obj.getSObject('Opportunity').get('Amount');
+                item.partial = False;
             }
             item.oppty_name = (String)result.opportunities.get(item.oppty_id).get('Name');
             item.opportunity_date = (Date)result.opportunities.get(item.oppty_id).get('CloseDate');

@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" controller="SoftCreditDataSource" access="global" >
     <aura:attribute name="model" type="Map" default="{}" required="true" access="private"/>
 
     <aura:attribute name="isLoadingDataTable" type="Boolean" default="true"/>
@@ -27,8 +27,7 @@
                          columns="{!v.model.tableColumns}"
                          keyField="Id"
                          hideCheckboxColumn="true"
-                         enableInfiniteLoading="{!v.model.enableInfiniteLoading}"
-                         onloadmore="{!c.loadMoreData}"
+                         enableInfiniteLoading="false"
                          isLoading="{!v.isLoadingDataTable}"
                     />
                 </div>

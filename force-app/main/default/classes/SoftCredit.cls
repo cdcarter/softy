@@ -23,5 +23,7 @@ public class SoftCredit {
         public Decimal amount {get;set;}
         @auraEnabled
         public Date opportunity_date {get;set;}
+        @auraEnabled
+        public Boolean partial {get;set;}
     }
 }
