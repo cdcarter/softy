@@ -79,21 +79,20 @@ public class SoftCreditRepository {
         public SObjectType sobjecttype {get { return sobj.getSObjectType();}}
         public Date creditDate {get {
             if (sobj.getSObjectType() == OpportunityContactRole.SObjectType) {
-                this.creditDate = (Date)sobj.getSObject('Opportunity').get('CloseDate');
+                return (Date)sobj.getSObject('Opportunity').get('CloseDate');
             } else {
-                this.creditDate = (Date)sobj.getSObject('npsp__Opportunity__r').get('CloseDate');
+                return (Date)sobj.getSObject('npsp__Opportunity__r').get('CloseDate');
             }
-            return this.creditDate;
-        } set;}
+        }}
         private CreditObject(SObject sobj){
             this.sobj = sobj;
         }
         public Integer compareTo(Object compareTo) {
             CreditObject compareObj = (CreditObject)compareTo;
             
-            if (this.creditDate > compareObj.creditDate) {
+            if (creditDate > compareObj.creditDate) {
                 return 1;
-            } else if (this.creditDate < compareObj.creditDate) {
+            } else if (creditDate < compareObj.creditDate) {
                 return -1;
             } else {
                 return 0;
