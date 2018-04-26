@@ -1,0 +1,11 @@
+{
+  "orgName": "softy - Release Test Org",
+  "edition": "Enterprise",
+  "instance": "CS46",
+  "orgPreferences" : {
+    "enabled": [
+      "S1DesktopEnabled",
+      "ChatterEnabled"
+    ]
+  }
+}

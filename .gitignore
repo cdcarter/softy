@@ -1,0 +1,4 @@
+.sfdx/
+**/*.pyc
+**/.DS_Store
+src/
