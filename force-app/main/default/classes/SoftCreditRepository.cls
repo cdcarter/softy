@@ -13,14 +13,17 @@ public class SoftCreditRepository {
         
         List<SObject> pscs = findPSCs();
         List<OpportunityContactRole> ocrs = findOCRs();
+        Set<Id> handledOCRIds = new Set<id>();
         
         for(SObject psc : pscs) {
             retVal.creditObjects.add(new CreditObject(psc));
+            handledOCRIds.add((Id)psc.get('npsp__Contact_Role_ID__c'));
         }
-        
         for(OpportunityContactRole ocr : ocrs) {
             retVal.opportunities.put(ocr.OpportunityId, ocr.Opportunity);
-            retVal.creditObjects.add(new CreditObject((SObject)ocr));
+            if (!handledOCRIds.contains(ocr.Id)) {
+                retVal.creditObjects.add(new CreditObject((SObject)ocr));
+            }
         }
         retVal.numOCRs = ocrs.size();
         retVal.numPSCs = pscs.size();
